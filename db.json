@@ -36,5 +36,9 @@
       "price": 123
     }
   ],
-  "featuredArticles": [1, 2, 3]
+  "featuredArticles": [
+    1,
+    2,
+    3
+  ]
 }

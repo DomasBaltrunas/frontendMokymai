@@ -145,8 +145,144 @@ const initSlider = function () {
   });
 };
 
+const initModalButtons = function () {
+  // Select HTML Elements
+  const btnAddArticle = document.querySelector('.btn-add-article');
+  const modalAddArticle = document.querySelector('.modal-add-article');
+  const inputAddArticleName = document.querySelector('.input-add-article-name');
+  const inputAddArticleDescription = document.querySelector(
+    '.input-add-article-description'
+  );
+  const inputAddArticleImage = document.querySelector(
+    '.input-add-article-image'
+  );
+  const inputAddArticlePrice = document.querySelector(
+    '.input-add-article-price'
+  );
+  const btnSubmitAddArticle = document.querySelector('.btn-submit-add-article');
+
+  const btnRemoveArticle = document.querySelector('.btn-remove-article');
+  const modalRemoveArticle = document.querySelector('.modal-remove-article');
+  const inputRemoveArticleId = document.querySelector(
+    '.input-remove-article-id'
+  );
+  const btnSubmitRemoveArticle = document.querySelector(
+    '.btn-submit-remove-article'
+  );
+
+  const btnSetFeaturedArticles = document.querySelector(
+    '.btn-set-featured-articles'
+  );
+  const modalSetFeaturedArticles = document.querySelector(
+    '.modal-set-featured-articles'
+  );
+  const inputSetFeaturedArticlesIds = document.querySelector(
+    '.input-set-featured-articles-ids'
+  );
+  const btnSubmitSetFeaturedArticles = document.querySelector(
+    '.btn-submit-set-featured-articles'
+  );
+
+  const modals = [
+    modalAddArticle,
+    modalRemoveArticle,
+    modalSetFeaturedArticles,
+  ];
+
+  const overlay = document.querySelector('.overlay');
+  const btnsCloseModal = [...document.querySelectorAll('.close-modal')];
+
+  const openModal = function (modalElement) {
+    modals.forEach(modal => modal.classList.add('hidden'));
+    modalElement.classList.remove('hidden');
+    overlay.classList.remove('hidden');
+  };
+
+  const closeModal = function () {
+    modals.forEach(modal => modal.classList.add('hidden'));
+    overlay.classList.add('hidden');
+  };
+
+  // Attach modal open/close event listeners
+  btnAddArticle.addEventListener('click', function (e) {
+    e.preventDefault();
+    openModal(modalAddArticle);
+  });
+
+  btnRemoveArticle.addEventListener('click', function (e) {
+    e.preventDefault();
+    openModal(modalRemoveArticle);
+  });
+
+  btnSetFeaturedArticles.addEventListener('click', function (e) {
+    e.preventDefault();
+    openModal(modalSetFeaturedArticles);
+  });
+
+  btnsCloseModal.forEach(btnCloseModal =>
+    btnCloseModal.addEventListener('click', function (e) {
+      e.preventDefault();
+      closeModal();
+    })
+  );
+
+  overlay.addEventListener('click', function (e) {
+    e.preventDefault();
+    closeModal();
+  });
+
+  // Add article modal functionality
+  btnSubmitAddArticle.addEventListener('click', async function (e) {
+    e.preventDefault();
+    const articleName = inputAddArticleName.value;
+    const articleDescription = inputAddArticleDescription.value;
+    const articleImage = inputAddArticleImage.value;
+    const articlePrice = parseFloat(inputAddArticlePrice.value);
+    await fetch('http://localhost:3000/articles', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: articleName,
+        description: articleDescription,
+        image: articleImage,
+        price: articlePrice,
+      }),
+    });
+  });
+
+  // Remove article modal functionality
+  btnSubmitRemoveArticle.addEventListener('click', async function (e) {
+    e.preventDefault();
+    const articleId = inputRemoveArticleId.value;
+    await fetch(`http://localhost:3000/articles/${articleId}`, {
+      method: 'DELETE',
+    });
+  });
+
+  // Set featured articles modal functionality
+  btnSubmitSetFeaturedArticles.addEventListener('click', async function (e) {
+    e.preventDefault();
+    var articleIds = inputSetFeaturedArticlesIds.value
+      .split(',')
+      .map(id => parseInt(id))
+      .filter(id => isFinite(id));
+    await fetch(`http://localhost:3000/featuredArticles`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(articleIds),
+    });
+  });
+};
+
 const init = async function () {
   await loadData();
   initSlider();
+  initModalButtons();
 };
 init();
