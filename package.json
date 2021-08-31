@@ -1,0 +1,22 @@
+{
+  "name": "frontendmokymai",
+  "version": "1.0.0",
+  "description": "frontend mokymu web shopas pagal wireframe'a ir requirementus",
+  "main": "script.js",
+  "scripts": {
+    "json:server": "json-server --watch db.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DomasBaltrunas/frontendMokymai.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DomasBaltrunas/frontendMokymai/issues"
+  },
+  "homepage": "https://github.com/DomasBaltrunas/frontendMokymai#readme",
+  "dependencies": {
+    "json-server": "^0.16.3"
+  }
+}

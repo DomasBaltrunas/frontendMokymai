@@ -186,9 +186,26 @@
   margin: 8px;
 }
 
-.articles .article .name {
+.articles .article .image {
+  object-fit: cover;
+  height: 200px;
+  margin: 8px;
+}
+
+.articles .article .card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.articles .article .card-body .name {
   font-weight: 700;
   font-size: 1.1rem;
+}
+
+.articles .article .card-body .description {
+  max-height: 200px;
+  overflow: hidden;
+  flex-grow: 1;
 }
 
 /* header */

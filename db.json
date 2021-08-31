@@ -1,0 +1,40 @@
+{
+  "articles": [
+    {
+      "id": 1,
+      "image": "img/asusVivobook.jpg",
+      "name": "ASUS VivoBook",
+      "description": "With standout colors and a color-blocking Enter key, ASUS VivoBook 15 adds flair and dynamism to daily computing. With the latest AMD Ryzen™ 7 Mobile Processor, VivoBook 15 provides the power you need to get things done.",
+      "price": 545.43
+    },
+    {
+      "id": 2,
+      "image": "img/hpProbook.jpg",
+      "name": "HP ProBook 450",
+      "description": "Full-featured, thin, and light, the reliable HPProBook 450 offers essential commercial features at an affordable price to every business. Automatic security solutions, powerful performance, and long battery life help keep your business productive.",
+      "price": 1271.49
+    },
+    {
+      "id": 3,
+      "image": "img/lenovoV15.jpg",
+      "name": "Lenovo V15 Iron Gray",
+      "description": "This laptop’s contemporary design gives it a premium look and feel, with a slim body that travels well when you’re not in the office. The optional FHD (1920 x 1080) 15.6\" display yields vivid colours and clarity, with narrow side bezels to enhance the view.",
+      "price": 562.01
+    },
+    {
+      "id": 4,
+      "image": "img/lenovoIdeapad.jpg",
+      "name": "Lenovo Ideapad",
+      "description": "Some quick example text to build on the card title and make up the bulk of the card's content.",
+      "price": 123
+    },
+    {
+      "id": 5,
+      "image": "img/lenovoLegion.jpg",
+      "name": "Lenovo Legion",
+      "description": "Some quick example text to build on the card title and make up the bulk of the card's content.",
+      "price": 123
+    }
+  ],
+  "featuredArticles": [1, 2, 3]
+}

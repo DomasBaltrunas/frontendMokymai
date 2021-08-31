@@ -1,5 +1,61 @@
+const fetchBody = url => fetch(url).then(response => response.json());
+const fetchFromLiveServer = path => fetchBody('http://localhost:3000' + path);
+const fetchArticles = () => fetchFromLiveServer('/articles');
+const fetchFeaturedArticles = () => fetchFromLiveServer('/featuredArticles');
+
+const loadData = async function () {
+  const articles = await fetchArticles();
+  const articlesContainer = document.querySelector('.articles');
+
+  for (const article of articles) {
+    const articleCardHtml = `
+      <div class="article card">
+        <img src="${article.image}" class="image card-img-top" />
+        <div class="card-body">
+          <h9 class="name card-title">${article.name}</h9>
+          <p class="description card-text">
+            ${article.description}
+          </p>
+          <a href="#article-${article.id}" class="btn btn-primary stretched-link">Details</a>
+        </div>
+      </div>`;
+
+    articlesContainer.insertAdjacentHTML('beforeend', articleCardHtml);
+  }
+
+  const featuredArticles = await fetchFeaturedArticles();
+  const featuredArticlesContainer = document.querySelector('.slider');
+
+  for (const featuredArticleId of featuredArticles) {
+    const featuredArticle = articles.find(
+      article => article.id === featuredArticleId
+    );
+    const featuredArticleSlideHtml = `
+      <div class="slide">
+        <div class="article-banner">
+          <h6 class="name">${featuredArticle.name}</h6>
+          <div class="description-container">
+            <blockquote class="description">
+              ${featuredArticle.description}
+            </blockquote>
+            <a href="#article-${featuredArticle.id}" class="read-more">See more...</a>
+          </div>
+          <div class="image-container">
+            <img src="${featuredArticle.image}" class="image" />
+            <div class="price-container"><p class="price">${featuredArticle.price} €</p></div>
+          </div>
+        </div>
+      </div>`;
+
+    featuredArticlesContainer.insertAdjacentHTML(
+      'beforeend',
+      featuredArticleSlideHtml
+    );
+  }
+};
+
 // Slider
-const slider = function () {
+const initSlider = function () {
   const slides = document.querySelectorAll('.slide');
   const btnLeft = document.querySelector('.slider__btn--left');
   const btnRight = document.querySelector('.slider__btn--right');
@@ -80,4 +136,9 @@ const slider = function () {
     }
   });
 };
-slider();
+
+const init = async function () {
+  await loadData();
+  initSlider();
+};
+init();
