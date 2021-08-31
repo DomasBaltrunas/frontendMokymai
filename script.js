@@ -3,9 +3,16 @@ const fetchFromLiveServer = path => fetchBody('http://localhost:3000' + path);
 const fetchArticles = () => fetchFromLiveServer('/articles');
 const fetchFeaturedArticles = () => fetchFromLiveServer('/featuredArticles');
 
+const removeAllChildNodes = function (parent) {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
+};
+
 const loadData = async function () {
   const articles = await fetchArticles();
   const articlesContainer = document.querySelector('.articles');
+  removeAllChildNodes(articlesContainer);
 
   for (const article of articles) {
     const articleCardHtml = `
@@ -24,7 +31,8 @@ const loadData = async function () {
   }
 
   const featuredArticles = await fetchFeaturedArticles();
-  const featuredArticlesContainer = document.querySelector('.slider');
+  const featuredArticlesContainer = document.querySelector('.slides');
+  removeAllChildNodes(featuredArticlesContainer);
 
   for (const featuredArticleId of featuredArticles) {
     const featuredArticle = articles.find(
