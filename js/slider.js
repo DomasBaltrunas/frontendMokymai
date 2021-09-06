@@ -1,21 +1,53 @@
-const initSlider = function () {
+import { removeAllChildNodes } from './util.js';
+
+const initSlides = function () {
   const slides = document.querySelectorAll('.slide');
-  const btnLeft = document.querySelector('.slider__btn--left');
-  const btnRight = document.querySelector('.slider__btn--right');
-  const dotContainer = document.querySelector('.dots');
+  let curSlide = -1;
+  const numSlides = slides.length;
+  const slideChangedEventListeners = [];
 
-  let curSlide = 0;
-  const maxSlide = slides.length;
-
-  // Functions
-  const createDots = function () {
-    slides.forEach(function (_, i) {
-      dotContainer.insertAdjacentHTML(
-        'beforeend',
-        `<button class="dots__dot" data-slide="${i}"></button>`
-      );
-    });
+  const enableSlideAnimations = function () {
+    setTimeout(() => slides.forEach(s => s.classList.add('animated')), 0);
   };
+
+  const raiseSlideChangedEvent = function (curSlide) {
+    slideChangedEventListeners.forEach(listener => listener(curSlide));
+  };
+
+  const goToSlide = function (slide) {
+    if (curSlide === slide) return;
+
+    slides.forEach(
+      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+    );
+
+    curSlide = slide;
+    raiseSlideChangedEvent(curSlide);
+  };
+
+  const nextSlide = function () {
+    const newSlide = curSlide >= numSlides - 1 ? 0 : curSlide + 1;
+    goToSlide(newSlide);
+  };
+
+  const prevSlide = function () {
+    const newSlide = curSlide <= 0 ? numSlides - 1 : curSlide - 1;
+    goToSlide(newSlide);
+  };
+
+  return {
+    nextSlide,
+    prevSlide,
+    goToSlide,
+    enableSlideAnimations,
+    addSlideChangedEventListener: listener =>
+      slideChangedEventListeners.push(listener),
+    getNumSlides: () => numSlides,
+  };
+};
+
+const initDots = function (numSlides, goToSlide) {
+  const dotContainer = document.querySelector('.dots');
 
   const activateDot = function (slide) {
     document
@@ -27,57 +59,51 @@ const initSlider = function () {
       .classList.add('dots__dot--active');
   };
 
-  const goToSlide = function (slide) {
-    slides.forEach(
-      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
-    );
+  const createDots = function () {
+    removeAllChildNodes(dotContainer);
+    [...Array(numSlides).keys()].forEach(function (_, i) {
+      dotContainer.insertAdjacentHTML(
+        'beforeend',
+        `<button class="dots__dot" data-slide="${i}"></button>`
+      );
+    });
   };
 
-  const enableSlideAnimations = function () {
-    setTimeout(() => slides.forEach(s => s.classList.add('animated')), 0);
-  };
+  const addDotClickHandlers = function () {
+    dotContainer.addEventListener('click', function (e) {
+      if (!e.target.classList.contains('dots__dot')) return;
 
-  const nextSlide = function () {
-    if (curSlide === maxSlide - 1) {
-      curSlide = 0;
-    } else {
-      curSlide++;
-    }
-
-    goToSlide(curSlide);
-    activateDot(curSlide);
-  };
-
-  const prevSlide = function () {
-    if (curSlide === 0) {
-      curSlide = maxSlide - 1;
-    } else {
-      curSlide--;
-    }
-    goToSlide(curSlide);
-    activateDot(curSlide);
-  };
-
-  const init = function () {
-    goToSlide(0);
-    enableSlideAnimations();
-
-    createDots();
-    activateDot(0);
-  };
-  init();
-
-  // Event handlers
-  btnRight.addEventListener('click', nextSlide);
-  btnLeft.addEventListener('click', prevSlide);
-
-  dotContainer.addEventListener('click', function (e) {
-    if (e.target.classList.contains('dots__dot')) {
-      const slide = e.target.dataset.slide;
+      const slide = parseInt(e.target.dataset.slide);
       goToSlide(slide);
       activateDot(slide);
-    }
-  });
+    });
+  };
+
+  createDots();
+  addDotClickHandlers();
+
+  return { activateDot };
+};
+
+const initNextBackButtons = function (nextSlide, prevSlide) {
+  const btnLeft = document.querySelector('.slider__btn--left');
+  const btnRight = document.querySelector('.slider__btn--right');
+
+  btnRight.addEventListener('click', nextSlide);
+  btnLeft.addEventListener('click', prevSlide);
+};
+
+const initSlider = function () {
+  const slides = initSlides();
+
+  const dots = initDots(slides.getNumSlides(), slides.goToSlide);
+  slides.addSlideChangedEventListener(curSlide => dots.activateDot(curSlide));
+
+  initNextBackButtons(slides.nextSlide, slides.prevSlide);
+
+  slides.goToSlide(0);
+  slides.enableSlideAnimations();
+  dots.activateDot(0);
 };
 
 export { initSlider };

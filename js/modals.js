@@ -14,8 +14,6 @@ const initAddArticleModal = function (registerModal, openModal) {
   );
   const btnSubmitAddArticle = document.querySelector('.btn-submit-add-article');
 
-  registerModal(modalAddArticle);
-
   // Attach modal open/close event listener
   btnAddArticle.addEventListener('click', function (e) {
     e.preventDefault();
@@ -43,6 +41,8 @@ const initAddArticleModal = function (registerModal, openModal) {
       }),
     });
   });
+
+  registerModal(modalAddArticle);
 };
 
 const initRemoveArticleModal = function (registerModal, openModal) {
@@ -55,8 +55,6 @@ const initRemoveArticleModal = function (registerModal, openModal) {
   const btnSubmitRemoveArticle = document.querySelector(
     '.btn-submit-remove-article'
   );
-
-  registerModal(modalRemoveArticle);
 
   // Attach modal open/close event listener
   btnRemoveArticle.addEventListener('click', function (e) {
@@ -72,6 +70,8 @@ const initRemoveArticleModal = function (registerModal, openModal) {
       method: 'DELETE',
     });
   });
+
+  registerModal(modalRemoveArticle);
 };
 
 const initSetFeaturedArticlesModal = function (registerModal, openModal) {
