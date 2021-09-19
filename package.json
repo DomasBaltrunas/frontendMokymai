@@ -4,7 +4,7 @@
   "description": "frontend mokymu web shopas pagal wireframe'a ir requirementus",
   "main": "script.js",
   "scripts": {
-    "json:server": "json-server --watch db.json"
+    "json:server": "json-server -p 3001 --watch db.json"
   },
   "repository": {
     "type": "git",
