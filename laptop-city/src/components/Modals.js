@@ -1,45 +1,29 @@
 import classNames from 'classnames';
 import './Modals.css';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  closeModalAction,
+  closeAllModalsAction,
+} from '../state/actions/modalsActions';
+import { isAnyModalOpenSelector } from '../state/selectors/isAnyModalOpenSelector';
 
-const Modals = ({
-  getIsModalOpen,
-  getIsAnyModalOpen,
-  closeModal,
-  closeAllModals,
-  refreshArticles,
-}) => {
+const Modals = ({ refreshArticles }) => {
   return (
     <>
-      <ModalAddArticle
-        identifier="add-article"
-        getIsModalOpen={getIsModalOpen}
-        closeModal={closeModal}
-        refreshArticles={refreshArticles}
-      />
-      <ModalRemoveArticle
-        identifier="remove-article"
-        getIsModalOpen={getIsModalOpen}
-        closeModal={closeModal}
-        refreshArticles={refreshArticles}
-      />
-      <ModalSetFeaturedArticles
-        identifier="set-featured-articles"
-        getIsModalOpen={getIsModalOpen}
-        closeModal={closeModal}
-        refreshArticles={refreshArticles}
-      />
-      <Overlay isShown={getIsAnyModalOpen()} closeAllModals={closeAllModals} />
+      <ModalAddArticle refreshArticles={refreshArticles} />
+      <ModalRemoveArticle refreshArticles={refreshArticles} />
+      <ModalSetFeaturedArticles refreshArticles={refreshArticles} />
+      <Overlay />
     </>
   );
 };
 
-const ModalAddArticle = ({
-  identifier,
-  getIsModalOpen,
-  closeModal,
-  refreshArticles,
-}) => {
+const ModalAddArticle = ({ refreshArticles }) => {
+  const isOpen = useSelector(state => state.modals.addArticle.isOpen);
+  const dispatch = useDispatch();
+  const closeModal = () => dispatch(closeModalAction('addArticle'));
+
   const initialFormState = {
     name: '',
     description: '',
@@ -68,9 +52,8 @@ const ModalAddArticle = ({
 
   return (
     <Modal
-      identifier={identifier}
       modalClassName="modal-add-article"
-      getIsModalOpen={getIsModalOpen}
+      isOpen={isOpen}
       closeModal={closeModal}
       title="Add article"
       content={
@@ -112,12 +95,11 @@ const ModalAddArticle = ({
   );
 };
 
-const ModalRemoveArticle = ({
-  identifier,
-  getIsModalOpen,
-  closeModal,
-  refreshArticles,
-}) => {
+const ModalRemoveArticle = ({ refreshArticles }) => {
+  const isOpen = useSelector(state => state.modals.removeArticle.isOpen);
+  const dispatch = useDispatch();
+  const closeModal = () => dispatch(closeModalAction('removeArticle'));
+
   const initialFormState = { articleId: '' };
   const [form, setForm] = useState(initialFormState);
 
@@ -131,9 +113,8 @@ const ModalRemoveArticle = ({
 
   return (
     <Modal
-      identifier={identifier}
       modalClassName="modal-remove-article"
-      getIsModalOpen={getIsModalOpen}
+      isOpen={isOpen}
       closeModal={closeModal}
       title="Remove article"
       content={
@@ -154,12 +135,11 @@ const ModalRemoveArticle = ({
   );
 };
 
-const ModalSetFeaturedArticles = ({
-  identifier,
-  getIsModalOpen,
-  closeModal,
-  refreshArticles,
-}) => {
+const ModalSetFeaturedArticles = ({ refreshArticles }) => {
+  const isOpen = useSelector(state => state.modals.setFeaturedArticles.isOpen);
+  const dispatch = useDispatch();
+  const closeModal = () => dispatch(closeModalAction('setFeaturedArticles'));
+
   const initialFormState = { featuredArticleIds: '' };
   const [form, setForm] = useState(initialFormState);
 
@@ -182,9 +162,8 @@ const ModalSetFeaturedArticles = ({
 
   return (
     <Modal
-      identifier={identifier}
       modalClassName="modal-set-featured-articles"
-      getIsModalOpen={getIsModalOpen}
+      isOpen={isOpen}
       closeModal={closeModal}
       title="Set featured articles"
       content={
@@ -200,21 +179,14 @@ const ModalSetFeaturedArticles = ({
   );
 };
 
-const Modal = ({
-  identifier,
-  modalClassName,
-  getIsModalOpen,
-  closeModal,
-  title,
-  content,
-}) => {
+const Modal = ({ modalClassName, isOpen, closeModal, title, content }) => {
   return (
     <div
       className={classNames(modalClassName, {
-        hidden: !getIsModalOpen(identifier),
+        hidden: !isOpen,
       })}
     >
-      <button className="close-modal" onClick={() => closeModal(identifier)}>
+      <button className="close-modal" onClick={closeModal}>
         &times;
       </button>
       <h1>{title}</h1>
@@ -223,10 +195,14 @@ const Modal = ({
   );
 };
 
-const Overlay = ({ isShown, closeAllModals }) => {
+const Overlay = props => {
+  const isAnyModalOpen = useSelector(isAnyModalOpenSelector);
+  const dispatch = useDispatch();
+  const closeAllModals = () => dispatch(closeAllModalsAction());
+
   return (
     <div
-      className={classNames('overlay', { hidden: !isShown })}
+      className={classNames('overlay', { hidden: !isAnyModalOpen })}
       onClick={closeAllModals}
     ></div>
   );

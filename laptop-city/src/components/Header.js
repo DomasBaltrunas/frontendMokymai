@@ -1,6 +1,8 @@
 import './Header.css';
+import { useDispatch } from 'react-redux';
+import { openModalAction } from '../state/actions/modalsActions';
 
-const Header = ({ openModal }) => {
+const Header = props => {
   return (
     <header className="header">
       <div className="primary">
@@ -27,21 +29,18 @@ const Header = ({ openModal }) => {
         <nav className="navbar">
           <ul>
             <li>
-              <ButtonOpenModal
-                title="Add article"
-                openModal={() => openModal('add-article')}
-              />
+              <ButtonOpenModal title="Add article" modalName="addArticle" />
             </li>
             <li>
               <ButtonOpenModal
                 title="Remove article"
-                openModal={() => openModal('remove-article')}
+                modalName="removeArticle"
               />
             </li>
             <li>
               <ButtonOpenModal
                 title="Set featured articles"
-                openModal={() => openModal('set-featured-articles')}
+                modalName="setFeaturedArticles"
               />
             </li>
           </ul>
@@ -51,7 +50,9 @@ const Header = ({ openModal }) => {
   );
 };
 
-const ButtonOpenModal = ({ title, openModal }) => {
+const ButtonOpenModal = ({ title, modalName }) => {
+  const dispatch = useDispatch();
+  const openModal = () => dispatch(openModalAction(modalName));
   const openModalHandler = function (e) {
     e.preventDefault();
     openModal();

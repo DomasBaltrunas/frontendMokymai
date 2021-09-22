@@ -63,7 +63,7 @@ const App = props => {
 
   return (
     <>
-      <Header openModal={openModal} />
+      <Header />
       <main>
         <section>
           <Slider articles={featuredArticles} />
@@ -73,13 +73,7 @@ const App = props => {
         </section>
       </main>
       <Footer />
-      <Modals
-        getIsModalOpen={getIsModalOpen}
-        getIsAnyModalOpen={getIsAnyModalOpen}
-        closeModal={closeModal}
-        closeAllModals={closeAllModals}
-        refreshArticles={refreshArticles}
-      />
+      <Modals refreshArticles={refreshArticles} />
     </>
   );
 };

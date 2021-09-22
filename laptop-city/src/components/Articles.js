@@ -3,7 +3,8 @@ import './Articles.css';
 const Articles = ({ articles }) => {
   return (
     <div className="articles">
-      {articles && articles.map(article => <Article article={article} />)}
+      {articles &&
+        articles.map(article => <Article key={article.id} article={article} />)}
     </div>
   );
 };
