@@ -1,10 +1,10 @@
 import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { combineReducers } from 'redux';
-import { modalsReducer } from './reducers/modalsReducer';
+import { modalReducer } from './reducers/modalReducer';
 
 const reducers = combineReducers({
-  modals: modalsReducer,
+  modal: modalReducer,
 });
 
 const store = createStore(reducers, {}, applyMiddleware(thunk));

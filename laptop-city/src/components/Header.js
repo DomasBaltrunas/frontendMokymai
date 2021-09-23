@@ -1,6 +1,6 @@
 import './Header.css';
 import { useDispatch } from 'react-redux';
-import { openModalAction } from '../state/actions/modalsActions';
+import { openModalAction } from '../state/actions/modalActions';
 
 const Header = props => {
   return (
