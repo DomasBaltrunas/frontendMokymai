@@ -2,7 +2,12 @@ const initialState = {
   openModal: null,
 };
 
-const modalReducer = (state = initialState, action) => {
+export interface IAction {
+  type: string;
+  payload?: any;
+}
+
+const modalReducer = (state = initialState, action: IAction) => {
   switch (action.type) {
     case 'open':
       return {

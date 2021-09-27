@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import classNames from 'classnames';
 import './Slider.css';
+import { FC } from 'react';
+import { IArticle } from '../api';
 
-const Slider = ({ articles }) => {
+interface ISliderProps {
+  articles: IArticle[];
+}
+
+const Slider: FC<ISliderProps> = ({ articles }) => {
   const [curSlide, setCurSlide] = useState(0);
   const numSlides = articles?.length ?? 0;
 
@@ -18,11 +24,7 @@ const Slider = ({ articles }) => {
 
   return (
     <div className="slider">
-      <Slides
-        articles={articles}
-        curSlide={curSlide}
-        setCurSlide={setCurSlide}
-      />
+      <Slides articles={articles} curSlide={curSlide} />
       <Arrow direction="left" onClick={prevSlide} />
       <Arrow direction="right" onClick={nextSlide} />
       <Dots
@@ -34,7 +36,12 @@ const Slider = ({ articles }) => {
   );
 };
 
-const Arrow = ({ direction, onClick }) => {
+interface IArrowProps {
+  direction: string;
+  onClick: () => void;
+}
+
+const Arrow: FC<IArrowProps> = ({ direction, onClick }) => {
   const directionClass = `slider__btn--${direction}`;
   const innerText =
     direction === 'left' ? '←' : direction === 'right' ? '→' : undefined;
@@ -45,7 +52,13 @@ const Arrow = ({ direction, onClick }) => {
   );
 };
 
-const Dots = ({ numDots, activeDot, setActiveDot }) => {
+interface IDotsProps {
+  numDots: number;
+  activeDot: number;
+  setActiveDot: (activeDot: number) => void;
+}
+
+const Dots: FC<IDotsProps> = ({ numDots, activeDot, setActiveDot }) => {
   return (
     <div className="dots">
       {[...Array(numDots)].map((_, i) => (
@@ -59,7 +72,12 @@ const Dots = ({ numDots, activeDot, setActiveDot }) => {
   );
 };
 
-const Dot = ({ isActive, setActive }) => {
+interface IDotProps {
+  isActive: boolean;
+  setActive: () => void;
+}
+
+const Dot: FC<IDotProps> = ({ isActive, setActive }) => {
   return (
     <button
       className={classNames('dots__dot', { 'dots__dot--active': isActive })}
@@ -68,7 +86,12 @@ const Dot = ({ isActive, setActive }) => {
   );
 };
 
-const Slides = ({ articles, curSlide }) => {
+interface ISlidesProps {
+  articles: IArticle[];
+  curSlide: number;
+}
+
+const Slides: FC<ISlidesProps> = ({ articles, curSlide }) => {
   return (
     <div className="slides">
       {articles &&
@@ -83,7 +106,12 @@ const Slides = ({ articles, curSlide }) => {
   );
 };
 
-const Slide = ({ article, transform }) => {
+interface ISlideProps {
+  article: IArticle;
+  transform: string;
+}
+
+const Slide: FC<ISlideProps> = ({ article, transform }) => {
   return (
     <div className="animated slide" style={{ transform }}>
       <div className="article-banner">
@@ -95,7 +123,7 @@ const Slide = ({ article, transform }) => {
           </a>
         </div>
         <div className="image-container">
-          <img src={article.image} className="image" />
+          <img src={article.image} alt="Article" className="image" />
           <div className="price-container">
             <p className="price">{article.price} €</p>
           </div>

@@ -1,6 +1,12 @@
 import './Articles.css';
+import { IArticle } from '../api';
+import { FC } from 'react';
 
-const Articles = ({ articles }) => {
+interface IArticlesProps {
+  articles: IArticle[];
+}
+
+const Articles: FC<IArticlesProps> = ({ articles }) => {
   return (
     <div className="articles">
       {articles &&
@@ -9,12 +15,16 @@ const Articles = ({ articles }) => {
   );
 };
 
-const Article = ({ article }) => {
+interface IArticleProps {
+  article: IArticle;
+}
+
+const Article: FC<IArticleProps> = ({ article }) => {
   return (
     <div className="article card">
-      <img src={article.image} className="image card-img-top" />
+      <img src={article.image} alt="Article" className="image card-img-top" />
       <div className="card-body">
-        <h9 className="name card-title">{article.name}</h9>
+        <h6 className="name card-title">{article.name}</h6>
         <p className="description card-text">{article.description}</p>
         <a
           href={`#article-${article.id}`}

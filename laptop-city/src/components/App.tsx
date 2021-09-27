@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { fetchArticles, fetchFeaturedArticles } from '../api';
+import { useState, useEffect, FC } from 'react';
+import { fetchArticles, fetchFeaturedArticles, IArticle } from '../api';
 import './App.css';
 import { Header } from './Header';
 import { Slider } from './Slider';
@@ -7,8 +7,8 @@ import { Articles } from './Articles';
 import { Footer } from './Footer';
 import { Modals } from './Modals';
 
-const App = props => {
-  const [apiData, setApiData] = useState({
+const App: FC<{}> = props => {
+  const [apiData, setApiData] = useState<IApiData>({
     articles: [],
     featuredArticles: [],
   });
@@ -28,38 +28,20 @@ const App = props => {
     setApiDataVer(apiDataVer + 1);
   };
 
-  const calcFeaturedArticles = function (articles, featuredArticles) {
-    if (!articles || !featuredArticles) return null;
-    return featuredArticles.map(featuredArticleId =>
-      articles.find(article => article.id === featuredArticleId)
-    );
+  const calcFeaturedArticles = function (
+    articles: IArticle[],
+    featuredArticles: number[]
+  ): IArticle[] {
+    return featuredArticles
+      .map(featuredArticleId =>
+        articles.find(article => article.id === featuredArticleId)
+      )
+      .filter(featuredArticle => !!featuredArticle) as IArticle[];
   };
   const featuredArticles = calcFeaturedArticles(
     apiData.articles,
     apiData.featuredArticles
   );
-
-  const [openModals, setOpenModals] = useState([]);
-
-  const getIsModalOpen = function (identifier) {
-    return openModals.some(openModal => openModal === identifier);
-  };
-
-  const getIsAnyModalOpen = function () {
-    return openModals?.length > 0;
-  };
-
-  const openModal = function (identifier) {
-    if (!getIsModalOpen(identifier)) setOpenModals([...openModals, identifier]);
-  };
-
-  const closeModal = function (identifier) {
-    setOpenModals(openModals.filter(openModal => openModal !== identifier));
-  };
-
-  const closeAllModals = function () {
-    setOpenModals([]);
-  };
 
   return (
     <>
@@ -79,3 +61,8 @@ const App = props => {
 };
 
 export default App;
+
+interface IApiData {
+  articles: IArticle[];
+  featuredArticles: number[];
+}

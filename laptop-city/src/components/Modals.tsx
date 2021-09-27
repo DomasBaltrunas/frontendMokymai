@@ -1,10 +1,15 @@
 import classNames from 'classnames';
 import './Modals.css';
-import { useState } from 'react';
+import { useState, FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeModalAction } from '../state/actions/modalActions';
+import { RootState } from '../state/store';
 
-const Modals = ({ refreshArticles }) => {
+interface IModalsProps {
+  refreshArticles: () => void;
+}
+
+const Modals: FC<IModalsProps> = ({ refreshArticles }) => {
   return (
     <>
       <ModalAddArticle refreshArticles={refreshArticles} />
@@ -15,8 +20,14 @@ const Modals = ({ refreshArticles }) => {
   );
 };
 
-const ModalAddArticle = ({ refreshArticles }) => {
-  const isOpen = useSelector(state => state.modal.openModal === 'addArticle');
+interface IModalProps {
+  refreshArticles: () => void;
+}
+
+const ModalAddArticle: FC<IModalProps> = ({ refreshArticles }) => {
+  const isOpen = useSelector(
+    (state: RootState) => state.modal.openModal === 'addArticle'
+  );
 
   const initialFormState = {
     name: '',
@@ -88,9 +99,9 @@ const ModalAddArticle = ({ refreshArticles }) => {
   );
 };
 
-const ModalRemoveArticle = ({ refreshArticles }) => {
+const ModalRemoveArticle: FC<IModalProps> = ({ refreshArticles }) => {
   const isOpen = useSelector(
-    state => state.modal.openModal === 'removeArticle'
+    (state: RootState) => state.modal.openModal === 'removeArticle'
   );
 
   const initialFormState = { articleId: '' };
@@ -127,9 +138,9 @@ const ModalRemoveArticle = ({ refreshArticles }) => {
   );
 };
 
-const ModalSetFeaturedArticles = ({ refreshArticles }) => {
+const ModalSetFeaturedArticles: FC<IModalProps> = ({ refreshArticles }) => {
   const isOpen = useSelector(
-    state => state.modal.openModal === 'setFeaturedArticles'
+    (state: RootState) => state.modal.openModal === 'setFeaturedArticles'
   );
 
   const initialFormState = { featuredArticleIds: '' };
@@ -170,7 +181,19 @@ const ModalSetFeaturedArticles = ({ refreshArticles }) => {
   );
 };
 
-const Modal = ({ modalClassName, isOpen, title, content }) => {
+interface IModalBaseProps {
+  modalClassName: string;
+  isOpen: boolean;
+  title: string;
+  content: any;
+}
+
+const Modal: FC<IModalBaseProps> = ({
+  modalClassName,
+  isOpen,
+  title,
+  content,
+}) => {
   const dispatch = useDispatch();
   const closeModal = () => dispatch(closeModalAction());
 
@@ -189,8 +212,10 @@ const Modal = ({ modalClassName, isOpen, title, content }) => {
   );
 };
 
-const Overlay = props => {
-  const isAnyModalOpen = useSelector(state => !!state.modal.openModal);
+const Overlay: FC<{}> = props => {
+  const isAnyModalOpen = useSelector(
+    (state: RootState) => !!state.modal.openModal
+  );
   const dispatch = useDispatch();
   const closeModal = () => dispatch(closeModalAction());
 

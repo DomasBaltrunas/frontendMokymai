@@ -1,8 +1,9 @@
 import './Header.css';
 import { useDispatch } from 'react-redux';
 import { openModalAction } from '../state/actions/modalActions';
+import { FC } from 'react';
 
-const Header = props => {
+const Header: FC<{}> = props => {
   return (
     <header className="header">
       <div className="primary">
@@ -50,10 +51,15 @@ const Header = props => {
   );
 };
 
-const ButtonOpenModal = ({ title, modalName }) => {
+interface IButtonOpenModalProps {
+  title: string;
+  modalName: string;
+}
+
+const ButtonOpenModal: FC<IButtonOpenModalProps> = ({ title, modalName }) => {
   const dispatch = useDispatch();
   const openModal = () => dispatch(openModalAction(modalName));
-  const openModalHandler = function (e) {
+  const openModalHandler = function (e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
     openModal();
   };
